@@ -23,7 +23,7 @@ public class ProgramService {
 	}
 	
 	public Program createEntity(Program entity) {
-		
+		//validations
         return repository.save(entity); // Saves entity to the database
     }
 
@@ -35,7 +35,7 @@ public class ProgramService {
         return repository.findById(id); // Fetch by ID
     }
 
-    public Program updateEntity(Program entity) {
+    public Program updateEntity(Integer id, Program entity) {
     	Program existingProgram = repository.findById(entity.getProgram_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Program with ID " + entity.getProgram_id() + " not found"));
    
@@ -52,8 +52,12 @@ public class ProgramService {
     }
 
     public void deleteEntity(Program prog) {
-        repository.delete(prog); // Deletes entity
+        ///add validations
+    	
+    	repository.delete(prog); // Deletes entity
     }
+
+
 	
 	
 	

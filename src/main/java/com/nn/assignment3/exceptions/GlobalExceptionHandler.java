@@ -13,18 +13,17 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
 			WebRequest request) {
-		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),
-				"An error occurred: " + ex.getMessage());
+		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), "An error occurred: " + ex.getMessage());
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
-	
+
 	// Handle database constraint violations (e.g., UNIQUE, NOT NULL)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse( "Database Violation" ,
-        		ex.getRootCause().getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+			WebRequest request) {
+		ErrorResponse errorResponse = new ErrorResponse("Database Violation", ex.getRootCause().getMessage());
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {

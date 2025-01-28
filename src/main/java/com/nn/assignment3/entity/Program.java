@@ -14,13 +14,11 @@ public class Program {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int program_id; 
+	private Integer program_id; 
 	
 	@Column(name="program_name", nullable=false, unique=true)
     private String programName;
-	
-	
-	
+		
     private String program_description;
 	
     @NotNull
@@ -38,11 +36,11 @@ public class Program {
 		this.program_status = program_status;
 	}
 
-	public int getProgram_id() {
+	public Integer getProgram_id() {
 		return program_id;
 	}
 
-	public void setProgram_id(int program_id) {
+	public void setProgram_id(Integer program_id) {
 		this.program_id = program_id;
 	}
 

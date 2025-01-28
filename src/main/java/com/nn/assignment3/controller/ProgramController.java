@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nn.assignment3.entity.Batch;
 import com.nn.assignment3.entity.Program;
 import com.nn.assignment3.services.ProgramService;
 
@@ -44,8 +45,8 @@ public class ProgramController {
 	}
 
 	@PutMapping("/programs/{id}")
-	public Optional<Program> updateProgram(@PathVariable Integer id) {
-		return programServ.getEntityById(id);
+	public Program updateProgram(@PathVariable Integer id, @RequestBody Program program) {
+		return programServ.updateEntity(id, program);
 
 	}
 
