@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nn.assignment3.entity.Batch;
@@ -22,48 +24,49 @@ public class BatchService {
 	@Autowired
 	private ProgramRepository progRepository;
 
-	public Batch createEntity(Batch entity) {
-		Program program = progRepository.findById(entity.getBatch_program_id()).orElseThrow(
-				() -> new ResourceNotFoundException("Program with ID " + entity.getBatch_program_id() + " not found"));
+	public ResponseEntity<?> createEntity(Batch entity) {
+		Program program = progRepository.findById(entity.getProgramId()).orElseThrow(
+				() -> new ResourceNotFoundException("Program with ID " + entity.getProgramId() + " not found"));
 		entity.setProgram(program);
-		entity.setBatch_program_id(program.getProgram_id());
-		Optional<Batch> batchWithSameName = repository.findByBatchName(entity.getBatch_name());
+		entity.setProgramId(program.getProgram_id());
+		Optional<Batch> batchWithSameName = repository.findByBatchName(entity.getBatchName());
 		if (batchWithSameName.isPresent()) {
-			throw new ResourceAlreadyExistsException("Batch name '" + entity.getBatch_name() + "' already exists.");
+			throw new ResourceAlreadyExistsException("Batch name '" + entity.getBatchName() + "' already exists.");
 		}
-		return repository.save(entity); // Saves entity to the database
+		repository.save(entity); // Saves entity to the database
+		return new ResponseEntity<>("Saved Successfully", HttpStatus.OK);
 	}
 
 	public List<Batch> getAllEntities() {
 		return repository.findAll(); // Fetch all records
-	}
+	} 
 
-	public Batch updateEntity(Integer id, Batch entity) {
+	public ResponseEntity<?> updateEntity(Integer id, Batch entity) {
 		// Ensure the Program exists
-		Program program = progRepository.findById(entity.getBatch_program_id()).orElseThrow(
-				() -> new ResourceNotFoundException("Program with ID " + entity.getBatch_program_id() + " not found"));
+		Program program = progRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("Program with ID " + entity.getProgramId() + " not found"));
 
 		// Check if the Batch exists
 		Batch existingBatch = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Batch with ID " + id + " not found"));
 
 		// Check if batchName has been changed and if it exists already
-		if (!existingBatch.getBatch_name().equals(entity.getBatch_name())) {
-			Optional<Batch> batchWithSameName = repository.findByBatchName(entity.getBatch_name());
+		if (!existingBatch.getBatchName().equals(entity.getBatchName())) {
+			Optional<Batch> batchWithSameName = repository.findByBatchName(entity.getBatchName());
 			if (batchWithSameName.isPresent()) {
-				throw new ResourceNotFoundException("Batch name '" + entity.getBatch_name() + "' already exists.");
+				throw new ResourceNotFoundException("Batch name '" + entity.getBatchName() + "' already exists.");
 			}
 		}
 
 //        // Update the batch details
-		existingBatch.setBatch_name(entity.getBatch_name());
+		existingBatch.setBatchName(entity.getBatchName());
 		existingBatch.setProgram(program);
-		existingBatch.setBatch_program_id(program.getProgram_id());
+		existingBatch.setProgramId(program.getProgram_id());
 		existingBatch.setBatch_description(entity.getBatch_description());
 		existingBatch.setBatch_no_of_classes(entity.getBatch_no_of_classes());
 		existingBatch.setBatch_status(entity.getBatch_status());
-
-		return repository.save(existingBatch);
+		repository.save(existingBatch);
+		return new ResponseEntity<>("Updated Successfully", HttpStatus.OK);
 	}
 
 	public void deleteEntity(Batch batch) {

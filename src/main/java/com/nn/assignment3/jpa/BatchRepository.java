@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.nn.assignment3.entity.Batch;
 
 @Repository
-public interface BatchRepository extends JpaRepository<Batch, Integer>{
-	
-	
+public interface BatchRepository extends JpaRepository<Batch, Integer> {
+
 	Optional<Batch> findByBatchName(String batch_name);
+	boolean existsByProgramId(Integer batch_program_id);
+	
 }

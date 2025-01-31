@@ -11,4 +11,5 @@ import com.nn.assignment3.entity.Program;
 public interface ProgramRepository extends JpaRepository<Program, Integer>{
 
 	Optional<Program> findByProgramName(String program_name);
+	
 }

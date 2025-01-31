@@ -22,35 +22,35 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/programs")
 public class ProgramController {
 
 	@Autowired
 	private ProgramService programServ;
 
-	@GetMapping("/programs")
+	@GetMapping
 	public List<Program> findAllProgrames() {
 		return programServ.getAllEntities();
 	}
 
-	@GetMapping("/programs/{id}")
+	@GetMapping("/{id}")
 	public Optional<Program> getProgramById(@PathVariable Integer id) {
 		return programServ.getEntityById(id);
 
 	}
 
-	@PostMapping("/programs")
-	public Program createProgram(@Valid @RequestBody Program Program) {
+	@PostMapping
+	public ResponseEntity<?> createProgram(@Valid @RequestBody Program Program) {
 		return programServ.createEntity(Program);
 	}
 
-	@PutMapping("/programs/{id}")
-	public Program updateProgram(@PathVariable Integer id, @RequestBody Program program) {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateProgram(@PathVariable Integer id, @Valid @RequestBody Program program) {
 		return programServ.updateEntity(id, program);
 
 	}
 
-	@DeleteMapping("/programs/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteProgram(@PathVariable Integer id) {
 		Program Program = programServ.getEntityById(id).orElseThrow(() -> new EntityNotFoundException("Program Not Found!"));
 		programServ.deleteEntity(Program);

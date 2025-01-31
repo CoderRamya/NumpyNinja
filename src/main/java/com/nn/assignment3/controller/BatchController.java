@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,35 +22,36 @@ import com.nn.assignment3.services.BatchService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/batches")
+@Validated
 public class BatchController {
 
 	@Autowired
 	private BatchService batchServ;
 
-	@GetMapping("/batches")
+	@GetMapping
 	public List<Batch> findAllBatches() {
 		return batchServ.getAllEntities();
 	}
 
-	@GetMapping("/batches/{id}")
+	@GetMapping("/{id}")
 	public Optional<Batch> getBatchById(@PathVariable Integer id) {
 		return batchServ.getEntityById(id);
 
 	}
 
-	@PostMapping("/batches")
-	public Batch createBatch(@Valid @RequestBody Batch batch) {
+	@PostMapping
+	public ResponseEntity<?> createBatch(@Valid @RequestBody Batch batch) {
 		return batchServ.createEntity(batch);
 	}
 
-	@PutMapping("/batches/{id}")
-	public Batch updateBatch(@PathVariable Integer id, @RequestBody Batch batch) {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateBatch(@PathVariable Integer id, @Valid @RequestBody Batch batch) {
 		return batchServ.updateEntity( id,batch);
 
 	}
 
-	@DeleteMapping("/batches/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> DeleteBatch(@PathVariable Integer id) {
 		Batch batch = batchServ.getEntityById(id).orElseThrow(() -> new ResourceNotFoundException("Batch Not Found!"));
 		batchServ.deleteEntity(batch);
